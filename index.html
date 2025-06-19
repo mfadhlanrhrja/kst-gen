@@ -29,62 +29,77 @@
     <button onclick="generateKST()" class="bg-blue-600 px-4 py-2 rounded mb-6">Generate KST</button>
 
     <!-- Output -->
-    <div id="kst" class="bg-white text-black p-6 text-sm hidden" style="font-family: Arial, sans-serif; line-height: 1.2;">
-      <div class="text-center mb-4">
-        <h2 class="font-bold text-lg">KARTU STUDI TETAP</h2>
-        <p class="text-sm">SEMESTER GENAP 2024/2025</p>
+    <div id="kst" class="bg-white text-black p-6 text-sm hidden" style="font-family: Arial, sans-serif; line-height: 1.3;">
+      <!-- Header -->
+      <div class="text-center mb-6">
+        <h1 class="font-bold text-lg mb-1">UNIVERSITAS RAHARJA</h1>
+        <p class="text-xs mb-1">Kampus Modern : Jl. Jendral Sudirman No. 40 Babakan Cikokol-Tangerang 15117</p>
+        <p class="text-xs mb-4">Telp. 021 - 5529692 Fax. 5532019</p>
+        <h2 class="font-bold text-base mb-1">KARTU STUDI TETAP</h2>
+        <p class="text-sm">Semester Genap 2024/2025</p>
       </div>
       
+      <!-- Student Info -->
       <div class="mb-4">
-        <div class="grid grid-cols-2 gap-4 text-sm">
-          <div>
-            <p><strong>Nama:</strong> <span id="outNama"></span></p>
-            <p><strong>NIM:</strong> <span id="outNIM"></span></p>
-            <p><strong>Strata:</strong> <span id="outStrata"></span></p>
+        <div class="grid grid-cols-2 gap-8 text-sm">
+          <div class="space-y-1">
+            <p><strong>NIM :</strong> <span id="outNIM"></span></p>
+            <p><strong>Nama :</strong> <span id="outNama"></span></p>
+            <p><strong>Program Pendidikan :</strong> <span id="outStrata"></span></p>
           </div>
-          <div>
-            <p><strong>Program Studi:</strong> <span id="outProdi"></span></p>
-            <p><strong>Konsentrasi:</strong> <span id="outKonsentrasi"></span></p>
-            <p><strong>Total SKS:</strong> <span id="totalSKS"></span></p>
+          <div class="space-y-1">
+            <p><strong>Prodi :</strong> <span id="outProdi"></span></p>
+            <p><strong>Konsentrasi :</strong> <span id="outKonsentrasi"></span></p>
+            <p><strong>Shift :</strong> Paket 1</p>
           </div>
         </div>
       </div>
 
-      <table class="w-full border-collapse border border-black mb-4">
+      <!-- Main Table -->
+      <table class="w-full border-collapse border border-black mb-4 text-xs">
         <thead>
-          <tr class="bg-gray-200">
-            <th class="border border-black p-1 text-xs">No</th>
-            <th class="border border-black p-1 text-xs">Mata Kuliah</th>
-            <th class="border border-black p-1 text-xs">Kelas</th>
-            <th class="border border-black p-1 text-xs">SKS</th>
-            <th class="border border-black p-1 text-xs">Hari</th>
-            <th class="border border-black p-1 text-xs">Ruang</th>
-            <th class="border border-black p-1 text-xs">Waktu</th>
+          <tr class="bg-white">
+            <th class="border border-black p-2 text-center font-bold">No</th>
+            <th class="border border-black p-2 text-center font-bold">MATAKULIAH</th>
+            <th class="border border-black p-2 text-center font-bold">KELAS</th>
+            <th class="border border-black p-2 text-center font-bold">SKS</th>
+            <th class="border border-black p-2 text-center font-bold">HARI</th>
+            <th class="border border-black p-2 text-center font-bold">RUANG</th>
+            <th class="border border-black p-2 text-center font-bold">WAKTU</th>
           </tr>
         </thead>
         <tbody id="tableBody">
         </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="3" class="border border-black p-2 text-center font-bold">Jumlah</td>
+            <td class="border border-black p-2 text-center font-bold"><span id="totalSKS"></span> SKS</td>
+            <td colspan="3" class="border border-black p-2"></td>
+          </tr>
+        </tfoot>
       </table>
 
-      <div class="mb-4">
-        <h3 class="font-bold text-sm mb-2">DATA DOSEN</h3>
-        <table class="w-full border-collapse border border-black">
-          <thead>
-            <tr class="bg-gray-200">
-              <th class="border border-black p-1 text-xs">No</th>
-              <th class="border border-black p-1 text-xs">Kelas</th>
-              <th class="border border-black p-1 text-xs">Nama Dosen</th>
-              <th class="border border-black p-1 text-xs">WhatsApp</th>
-            </tr>
-          </thead>
-          <tbody id="dosenTable">
-          </tbody>
-        </table>
-      </div>
+      <!-- Lecturer Table -->
+      <table class="w-full border-collapse border border-black mb-4 text-xs">
+        <thead>
+          <tr class="bg-white">
+            <th class="border border-black p-2 text-center font-bold">No</th>
+            <th class="border border-black p-2 text-center font-bold">KELAS</th>
+            <th class="border border-black p-2 text-center font-bold">DOSEN</th>
+            <th class="border border-black p-2 text-center font-bold">WHATSAPP</th>
+          </tr>
+        </thead>
+        <tbody id="dosenTable">
+        </tbody>
+      </table>
 
-      <div class="text-right text-sm">
-        <p>Depok, <span id="tanggalSekarang"></span></p>
-        <p class="mt-16">Koordinator Program Studi</p>
+      <!-- Footer -->
+      <div class="mt-6">
+        <p class="text-sm font-bold">KONTAK PRODI :</p>
+        <p class="text-sm mb-4">Prodi : https://linktr.ee/raharja</p>
+        <div class="text-right">
+          <p class="text-sm">Tangerang, <span id="tanggalSekarang"></span></p>
+        </div>
       </div>
     </div>
 
@@ -184,22 +199,22 @@
         // Add theory class
         tbody.innerHTML += `
           <tr>
-            <td class='border border-black p-1 text-center'>${rowIndex}</td>
-            <td class='border border-black p-1'>${matkul.nama}</td>
-            <td class='border border-black p-1 text-center'>${kelasTeori}</td>
-            <td class='border border-black p-1 text-center'>${matkul.sks}</td>
-            <td class='border border-black p-1 text-center'>${hari}</td>
-            <td class='border border-black p-1 text-center'>${ruang}</td>
-            <td class='border border-black p-1 text-center'>${waktu}</td>
+            <td class='border border-black p-2 text-center'>${rowIndex}</td>
+            <td class='border border-black p-2'>${matkul.nama}</td>
+            <td class='border border-black p-2 text-center'>${kelasTeori}</td>
+            <td class='border border-black p-2 text-center'>${matkul.sks}</td>
+            <td class='border border-black p-2 text-center'>${hari}</td>
+            <td class='border border-black p-2 text-center'>${ruang}</td>
+            <td class='border border-black p-2 text-center'>${waktu}</td>
           </tr>`;
 
         // Add lecturer data
         dosenBody.innerHTML += `
           <tr>
-            <td class='border border-black p-1 text-center'>${dosenIndex}</td>
-            <td class='border border-black p-1 text-center'>${kelasTeori}</td>
-            <td class='border border-black p-1'>${dosen}</td>
-            <td class='border border-black p-1 text-center'>${whatsapp}</td>
+            <td class='border border-black p-2 text-center'>${dosenIndex}</td>
+            <td class='border border-black p-2 text-center'>${kelasTeori}</td>
+            <td class='border border-black p-2'>${dosen}</td>
+            <td class='border border-black p-2 text-center'>${whatsapp}</td>
           </tr>`;
 
         totalSKS += matkul.sks;
@@ -215,22 +230,22 @@
 
           tbody.innerHTML += `
             <tr>
-              <td class='border border-black p-1 text-center'>${rowIndex}</td>
-              <td class='border border-black p-1'>${matkul.nama} (Praktek)</td>
-              <td class='border border-black p-1 text-center'>${kelasPraktek}</td>
-              <td class='border border-black p-1 text-center'>0</td>
-              <td class='border border-black p-1 text-center'>${hari}</td>
-              <td class='border border-black p-1 text-center'>${getRandom(ruangList)}</td>
-              <td class='border border-black p-1 text-center'>${waktuPraktek}</td>
+              <td class='border border-black p-2 text-center'>${rowIndex}</td>
+              <td class='border border-black p-2'>${matkul.nama} (Praktek)</td>
+              <td class='border border-black p-2 text-center'>${kelasPraktek}</td>
+              <td class='border border-black p-2 text-center'>0</td>
+              <td class='border border-black p-2 text-center'>${hari}</td>
+              <td class='border border-black p-2 text-center'>${getRandom(ruangList)}</td>
+              <td class='border border-black p-2 text-center'>${waktuPraktek}</td>
             </tr>`;
 
           // Add practical lecturer data
           dosenBody.innerHTML += `
             <tr>
-              <td class='border border-black p-1 text-center'>${dosenIndex}</td>
-              <td class='border border-black p-1 text-center'>${kelasPraktek}</td>
-              <td class='border border-black p-1'>${dosenPraktek}</td>
-              <td class='border border-black p-1 text-center'>${whatsappPraktek}</td>
+              <td class='border border-black p-2 text-center'>${dosenIndex}</td>
+              <td class='border border-black p-2 text-center'>${kelasPraktek}</td>
+              <td class='border border-black p-2'>${dosenPraktek}</td>
+              <td class='border border-black p-2 text-center'>${whatsappPraktek}</td>
             </tr>`;
 
           rowIndex++;
@@ -244,7 +259,7 @@
       document.getElementById("totalSKS").innerText = totalSKS;
       document.getElementById("tanggalSekarang").innerText = new Date().toLocaleDateString("id-ID", {
         day: "numeric",
-        month: "long", 
+        month: "short", 
         year: "numeric"
       });
 
