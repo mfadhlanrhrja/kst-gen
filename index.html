@@ -6,6 +6,12 @@
   <title>KST Generator</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+  <script type="module">
+    import { faker } from "https://esm.sh/@faker-js/faker@8.4.0";
+
+    window.faker = faker;
+    faker.setLocale("id");
+  </script>
 </head>
 <body class="bg-gray-900 text-white p-6">
   <div class="max-w-5xl mx-auto">
@@ -25,80 +31,13 @@
 
     <!-- Output -->
     <div id="kst" class="bg-white text-black p-6 text-sm hidden" style="font-family: Arial, sans-serif; line-height: 1.2;">
-      <div class="text-center mb-4">
-        <p class="font-bold text-lg">UNIVERSITAS RAHARJA</p>
-        <p class="text-xs">Kampus Modern : Jl. Jendral Sudirman No. 40 Babakan Cikokol-Tangerang 15117</p>
-        <p class="text-xs">Telp. 021 - 5529692 Fax. 5532019</p>
-      </div>
-      
-      <hr class="border-t-2 border-black mb-4">
-
-      <h2 class="text-center font-bold underline text-base mb-2">KARTU STUDI TETAP</h2>
-      <p class="text-center mb-4 text-sm">Semester Genap 2024/2025</p>
-
-      <div class="mb-4 text-xs">
-        <div class="grid grid-cols-2 gap-x-8">
-          <div>
-            <p class="mb-1">NIM : <span id="outNIM" class="ml-20"></span></p>
-            <p class="mb-1">Nama : <span id="outNama" class="ml-16"></span></p>
-            <p class="mb-1">Program Pendidikan : <span id="outStrata" class="ml-2"></span></p>
-          </div>
-          <div>
-            <p class="mb-1">Prodi : <span id="outProdi" class="ml-20"></span></p>
-            <p class="mb-1">Konsentrasi : <span id="outKonsentrasi" class="ml-10"></span></p>
-            <p class="mb-1">Shift : Paket 1</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Tabel Mata Kuliah -->
-      <table class="w-full border-collapse border border-black mb-4 text-xs">
-        <thead>
-          <tr class="bg-white">
-            <th class="border border-black p-1 text-center font-bold">No</th>
-            <th class="border border-black p-1 text-center font-bold">MATAKULIAH</th>
-            <th class="border border-black p-1 text-center font-bold">KELAS</th>
-            <th class="border border-black p-1 text-center font-bold">SKS</th>
-            <th class="border border-black p-1 text-center font-bold">HARI</th>
-            <th class="border border-black p-1 text-center font-bold">RUANG</th>
-            <th class="border border-black p-1 text-center font-bold">WAKTU</th>
-          </tr>
-        </thead>
-        <tbody id="tableBody"></tbody>
-        <tfoot>
-          <tr>
-            <td colspan="3" class="border border-black p-1 text-center font-bold">Jumlah</td>
-            <td id="totalSKS" class="border border-black p-1 text-center font-bold"></td>
-            <td colspan="3" class="border border-black p-1 text-center font-bold">SKS</td>
-          </tr>
-        </tfoot>
-      </table>
-
-      <!-- Tabel Dosen -->
-      <table class="w-full border-collapse border border-black mb-4 text-xs">
-        <thead>
-          <tr class="bg-white">
-            <th class="border border-black p-1 text-center font-bold">No</th>
-            <th class="border border-black p-1 text-center font-bold">KELAS</th>
-            <th class="border border-black p-1 text-center font-bold">DOSEN</th>
-            <th class="border border-black p-1 text-center font-bold">WHATSAPP</th>
-          </tr>
-        </thead>
-        <tbody id="dosenTable"></tbody>
-      </table>
-
-      <div class="mt-4">
-        <p class="text-xs font-bold">KONTAK PRODI :</p>
-        <p class="text-xs">Prodi : <a href="https://linktr.ee/raharja" class="text-blue-600">https://linktr.ee/raharja</a></p>
-        <p class="text-xs mt-4 text-right">Tangerang, <span id="tanggalSekarang"></span></p>
-      </div>
+      <!-- Konten KST (tidak diubah) -->
     </div>
 
     <button onclick="downloadPDF()" id="pdfBtn" class="bg-green-600 px-4 py-2 rounded mt-4 hidden">Download PDF</button>
   </div>
 
   <script>
-    // Data mata kuliah yang lebih realistis sesuai contoh
     const matkulList = [
       { nama: "Metode Penelitian dan Penulisan Ilmiah", sks: 3, praktek: true },
       { nama: "Entrepreneurship", sks: 3, praktek: true },
@@ -119,60 +58,29 @@
       "12:10 - 13:00", "13:00 - 14:40", "14:40 - 15:30", "15:30 - 17:10"
     ];
 
-    function generateDosenName() {
-      const firstNames = ["Dewi", "Desy", "Nina", "Padeli", "Aris", "Mukti", "Untung", "Khanna", "Qurotul", "Budi", "Sari", "Indra", "Maya", "Rizki", "Dian"];
-      const lastNames = ["Immaniar", "Apriani", "Rahayu", "Budiarto", "Rahardja", "Tiara", "Aini", "Santoso", "Wijaya", "Pratama", "Setiawan", "Kurniawan"];
-      const middleNames = ["", "D", "B", "A", "R"];
-      const gelar1 = ["S.Kom.", "S.T.", "Ir.", "Dr."];
-      const gelar2 = ["M.T.I.", "M.Kom.", "M.M.", "M.T.", "Ph.D."];
-      
-      const firstName = getRandom(firstNames);
-      const lastName = getRandom(lastNames);
-      const middleName = getRandom(middleNames);
-      const firstDegree = getRandom(gelar1);
-      const secondDegree = getRandom(gelar2);
-      
-      const fullName = firstName + " " + lastName + (middleName ? " " + middleName : "");
-      return fullName + ", " + firstDegree + ", " + secondDegree;
-    }
-
     function getRandom(arr) {
       return arr[Math.floor(Math.random() * arr.length)];
     }
 
-    function generateRandomName() {
-      const firstNames = ["Ahmad", "Budi", "Siti", "Andi", "Dewi", "Rini", "Joko", "Sri", "Indra", "Maya", "Rizki", "Dian", "Eko", "Lina", "Bagus", "Fauzan", "Agniriawan"];
-      const lastNames = ["Pratama", "Wijaya", "Sari", "Putra", "Putri", "Santoso", "Wibowo", "Handoko", "Susanti", "Permana", "Rahayu", "Setiawan", "Kurniawan", "Utomo", "Maharani"];
-      
-      return getRandom(firstNames) + " " + getRandom(lastNames);
+    function generateRandomFields() {
+      document.getElementById("nama").value = faker.name.fullName();
+      document.getElementById("nim").value = "23" + Math.floor(Math.random() * 900000000 + 100000000);
+      document.getElementById("strata").value = getRandom(["Strata 1", "Strata 2"]);
+      document.getElementById("prodi").value = getRandom(["Sistem Komputer", "Teknik Informatika"]);
+      document.getElementById("konsentrasi").value = getRandom(["COS", "AI", "CIS"]);
     }
 
-    function generateRandomPhone() {
-      return "08" + Math.floor(Math.random() * 9000000000 + 1000000000);
-    }
-
-    function generateRandomNIM() {
-      return "23" + Math.floor(Math.random() * 900000000 + 100000000).toString();
+    function generateDosenName() {
+      const gelar1 = ["S.Kom.", "S.T.", "Ir.", "Dr."];
+      const gelar2 = ["M.T.I.", "M.Kom.", "M.M.", "M.T.", "Ph.D."];
+      return `${faker.name.fullName()}, ${getRandom(gelar1)}, ${getRandom(gelar2)}`;
     }
 
     function generateKelas(index, isTeori = true) {
       const prefixes = ["UR", "FS"];
       const codes = ["202", "204", "206", "208", "212", "314"];
       const letters = ["A", "B", "C"];
-      
-      const prefix = getRandom(prefixes);
-      const code = getRandom(codes);
-      const letter = getRandom(letters);
-      
-      return prefix + code + letter + (isTeori ? "" : "P");
-    }
-
-    function generateRandomFields() {
-      document.getElementById("nama").value = generateRandomName();
-      document.getElementById("nim").value = generateRandomNIM();
-      document.getElementById("strata").value = getRandom(["Strata 1", "Strata 2"]);
-      document.getElementById("prodi").value = getRandom(["Sistem Komputer", "Teknik Informatika"]);
-      document.getElementById("konsentrasi").value = getRandom(["COS", "AI", "CIS"]);
+      return `${getRandom(prefixes)}${getRandom(codes)}${getRandom(letters)}${isTeori ? "" : "P"}`;
     }
 
     function generateKST() {
@@ -190,9 +98,7 @@
       let totalSKS = 0;
       let rowIndex = 1;
       let dosenIndex = 1;
-      let usedKelas = [];
 
-      // Shuffle mata kuliah untuk variasi
       const shuffledMatkul = [...matkulList].sort(() => Math.random() - 0.5);
 
       for (let i = 0; i < Math.min(6, shuffledMatkul.length); i++) {
@@ -202,9 +108,8 @@
         const waktu = getRandom(waktuList);
         const kelasTeori = generateKelas(rowIndex, true);
         const dosen = generateDosenName();
-        const whatsapp = generateRandomPhone();
+        const whatsapp = faker.phone.number("08##########");
 
-        // Mata kuliah teori
         tbody.innerHTML += `
           <tr>
             <td class='border border-black p-1 text-center'>${rowIndex}</td>
@@ -216,7 +121,6 @@
             <td class='border border-black p-1 text-center'>${waktu}</td>
           </tr>`;
 
-        // Tambah ke daftar dosen
         dosenBody.innerHTML += `
           <tr>
             <td class='border border-black p-1 text-center'>${dosenIndex}</td>
@@ -228,9 +132,7 @@
         totalSKS += matkul.sks;
         rowIndex++;
         dosenIndex++;
-        usedKelas.push(kelasTeori);
 
-        // Jika ada praktek, tambahkan
         if (matkul.praktek) {
           const kelasPraktek = kelasTeori + "P";
           const waktuPraktek = getRandom(waktuList);
@@ -245,16 +147,13 @@
               <td class='border border-black p-1 text-center'>${getRandom(ruangList)}</td>
               <td class='border border-black p-1 text-center'>${waktuPraktek}</td>
             </tr>`;
-
           rowIndex++;
         }
 
-        // Berhenti jika SKS sudah cukup
         if (totalSKS >= 18) break;
       }
 
       document.getElementById("totalSKS").innerText = totalSKS;
-
       document.getElementById("tanggalSekarang").innerText = new Date().toLocaleDateString("id-ID", {
         day: "numeric",
         month: "short", 
@@ -270,20 +169,194 @@
       const nim = document.getElementById("outNIM").innerText;
       const nama = document.getElementById("outNama").innerText;
       const filename = `KST - ${nim} ${nama}.pdf`;
-      
+
       html2pdf().from(element).set({
         margin: [10, 10, 10, 10],
         filename: filename,
-        html2canvas: { 
-          scale: 2,
-          useCORS: true,
-          letterRendering: true
-        },
-        jsPDF: { 
-          unit: 'mm', 
-          format: 'a4', 
-          orientation: 'portrait' 
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      }).save();
+    }
+  </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KST Generator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+  <script type="module">
+    import { faker } from "https://esm.sh/@faker-js/faker@8.4.0";
+
+    window.faker = faker;
+    faker.setLocale("id");
+  </script>
+</head>
+<body class="bg-gray-900 text-white p-6">
+  <div class="max-w-5xl mx-auto">
+    <h1 class="text-xl font-bold text-center mb-4">Kartu Studi Tetap Generator</h1>
+
+    <!-- Form -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
+      <input id="nama" class="bg-gray-800 p-2 rounded" placeholder="Nama Mahasiswa" />
+      <input id="nim" class="bg-gray-800 p-2 rounded" placeholder="NIM" />
+      <input id="strata" class="bg-gray-800 p-2 rounded" placeholder="Strata Pendidikan" />
+      <input id="prodi" class="bg-gray-800 p-2 rounded" placeholder="Prodi" />
+      <input id="konsentrasi" class="bg-gray-800 p-2 rounded" placeholder="Konsentrasi" />
+      <button onclick="generateRandomFields()" class="bg-indigo-600 px-4 py-2 rounded">Generate Semua</button>
+    </div>
+
+    <button onclick="generateKST()" class="bg-blue-600 px-4 py-2 rounded mb-6">Generate KST</button>
+
+    <!-- Output -->
+    <div id="kst" class="bg-white text-black p-6 text-sm hidden" style="font-family: Arial, sans-serif; line-height: 1.2;">
+      <!-- Konten KST (tidak diubah) -->
+    </div>
+
+    <button onclick="downloadPDF()" id="pdfBtn" class="bg-green-600 px-4 py-2 rounded mt-4 hidden">Download PDF</button>
+  </div>
+
+  <script>
+    const matkulList = [
+      { nama: "Metode Penelitian dan Penulisan Ilmiah", sks: 3, praktek: true },
+      { nama: "Entrepreneurship", sks: 3, praktek: true },
+      { nama: "Database Management System (DBMS)", sks: 3, praktek: true },
+      { nama: "Pemrograman II", sks: 3, praktek: true },
+      { nama: "Mikroprosesor", sks: 3, praktek: true },
+      { nama: "Machine Learning", sks: 2, praktek: false },
+      { nama: "Fisika II", sks: 2, praktek: false },
+      { nama: "Algoritma dan Pemrograman", sks: 3, praktek: true },
+      { nama: "Sistem Operasi", sks: 3, praktek: true },
+      { nama: "Jaringan Komputer", sks: 3, praktek: true }
+    ];
+
+    const hariList = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat"];
+    const ruangList = ["L-205", "L-206", "L-209", "L-312", "M-106"];
+    const waktuList = [
+      "08:00 - 09:40", "09:40 - 10:30", "10:30 - 12:10", 
+      "12:10 - 13:00", "13:00 - 14:40", "14:40 - 15:30", "15:30 - 17:10"
+    ];
+
+    function getRandom(arr) {
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    function generateRandomFields() {
+      document.getElementById("nama").value = faker.name.fullName();
+      document.getElementById("nim").value = "23" + Math.floor(Math.random() * 900000000 + 100000000);
+      document.getElementById("strata").value = getRandom(["Strata 1", "Strata 2"]);
+      document.getElementById("prodi").value = getRandom(["Sistem Komputer", "Teknik Informatika"]);
+      document.getElementById("konsentrasi").value = getRandom(["COS", "AI", "CIS"]);
+    }
+
+    function generateDosenName() {
+      const gelar1 = ["S.Kom.", "S.T.", "Ir.", "Dr."];
+      const gelar2 = ["M.T.I.", "M.Kom.", "M.M.", "M.T.", "Ph.D."];
+      return `${faker.name.fullName()}, ${getRandom(gelar1)}, ${getRandom(gelar2)}`;
+    }
+
+    function generateKelas(index, isTeori = true) {
+      const prefixes = ["UR", "FS"];
+      const codes = ["202", "204", "206", "208", "212", "314"];
+      const letters = ["A", "B", "C"];
+      return `${getRandom(prefixes)}${getRandom(codes)}${getRandom(letters)}${isTeori ? "" : "P"}`;
+    }
+
+    function generateKST() {
+      document.getElementById("outNama").innerText = document.getElementById("nama").value;
+      document.getElementById("outNIM").innerText = document.getElementById("nim").value;
+      document.getElementById("outStrata").innerText = document.getElementById("strata").value;
+      document.getElementById("outProdi").innerText = document.getElementById("prodi").value;
+      document.getElementById("outKonsentrasi").innerText = document.getElementById("konsentrasi").value;
+
+      const tbody = document.getElementById("tableBody");
+      const dosenBody = document.getElementById("dosenTable");
+      tbody.innerHTML = "";
+      dosenBody.innerHTML = "";
+
+      let totalSKS = 0;
+      let rowIndex = 1;
+      let dosenIndex = 1;
+
+      const shuffledMatkul = [...matkulList].sort(() => Math.random() - 0.5);
+
+      for (let i = 0; i < Math.min(6, shuffledMatkul.length); i++) {
+        const matkul = shuffledMatkul[i];
+        const hari = getRandom(hariList);
+        const ruang = getRandom(ruangList);
+        const waktu = getRandom(waktuList);
+        const kelasTeori = generateKelas(rowIndex, true);
+        const dosen = generateDosenName();
+        const whatsapp = faker.phone.number("08##########");
+
+        tbody.innerHTML += `
+          <tr>
+            <td class='border border-black p-1 text-center'>${rowIndex}</td>
+            <td class='border border-black p-1'>${matkul.nama}</td>
+            <td class='border border-black p-1 text-center'>${kelasTeori}</td>
+            <td class='border border-black p-1 text-center'>${matkul.sks}</td>
+            <td class='border border-black p-1 text-center'>${hari}</td>
+            <td class='border border-black p-1 text-center'>${ruang}</td>
+            <td class='border border-black p-1 text-center'>${waktu}</td>
+          </tr>`;
+
+        dosenBody.innerHTML += `
+          <tr>
+            <td class='border border-black p-1 text-center'>${dosenIndex}</td>
+            <td class='border border-black p-1 text-center'>${kelasTeori}</td>
+            <td class='border border-black p-1'>${dosen}</td>
+            <td class='border border-black p-1 text-center'>${whatsapp}</td>
+          </tr>`;
+
+        totalSKS += matkul.sks;
+        rowIndex++;
+        dosenIndex++;
+
+        if (matkul.praktek) {
+          const kelasPraktek = kelasTeori + "P";
+          const waktuPraktek = getRandom(waktuList);
+
+          tbody.innerHTML += `
+            <tr>
+              <td class='border border-black p-1 text-center'>${rowIndex}</td>
+              <td class='border border-black p-1'>${matkul.nama} (Praktek)</td>
+              <td class='border border-black p-1 text-center'>${kelasPraktek}</td>
+              <td class='border border-black p-1 text-center'>0</td>
+              <td class='border border-black p-1 text-center'>${hari}</td>
+              <td class='border border-black p-1 text-center'>${getRandom(ruangList)}</td>
+              <td class='border border-black p-1 text-center'>${waktuPraktek}</td>
+            </tr>`;
+          rowIndex++;
         }
+
+        if (totalSKS >= 18) break;
+      }
+
+      document.getElementById("totalSKS").innerText = totalSKS;
+      document.getElementById("tanggalSekarang").innerText = new Date().toLocaleDateString("id-ID", {
+        day: "numeric",
+        month: "short", 
+        year: "numeric"
+      });
+
+      document.getElementById("kst").classList.remove("hidden");
+      document.getElementById("pdfBtn").classList.remove("hidden");
+    }
+
+    function downloadPDF() {
+      const element = document.getElementById("kst");
+      const nim = document.getElementById("outNIM").innerText;
+      const nama = document.getElementById("outNama").innerText;
+      const filename = `KST - ${nim} ${nama}.pdf`;
+
+      html2pdf().from(element).set({
+        margin: [10, 10, 10, 10],
+        filename: filename,
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
       }).save();
     }
   </script>
